@@ -23,13 +23,15 @@ class Hero:
     ACTION_PER_TIME = 0.5 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 6
 
-    LEFT_ATTACK, RIGHT_ATTACK = 0, 1
+    LEFT_ATTACK, RIGHT_ATTACK, DEATH_L, DEATH_R = 0, 1, 2, 3
 
     def __init__(self):
         self.x, self.y = 300, 135
         self.frame = random.randint(0, 3)
         self.image_LEFT = load_image('hulk_L.png')
         self.image_RIGHT = load_image('hulk_R.png')
+        self.image_DEATH = load_image('death_L.png')
+        self.image_DEATH = load_image('death_R.png')
         self.state = self.LEFT_ATTACK
         self.total_frames = 0
 
@@ -47,10 +49,16 @@ class Hero:
 
 
     def draw(self):
+        #공격모션
         if self.state == self.LEFT_ATTACK :
             self.image_LEFT.clip_draw(self.frame * 200, 0, 200, 200, self.x, self.y)
-        else:
-            self.image_RIGHT.clip_draw(self.frame * 200, 0, 200, 200, self.x, self.y)
+        if self.state == self.RIGHT_ATTACK:
+            self.image_RIGHT.clip_draw(self.frame * 200, 0, 200, 200, self.x , self.y )
+        # 죽었을때
+        if self.state == self.DEATH_L:
+            self.image_DEATH_L.clip_draw(self.frame * 200, 0, 200, 200, self.x , self.y - 80)
+        if self.state == self.DEATH_R:
+            self.image_DEATH_R.clip_draw(self.frame * 200, 0, 200, 200, self.x , self.y - 80)
 
 class Background:
     def __init__(self):
@@ -65,12 +73,23 @@ class Block:
 
     MOVE_PER_TIME = 200
 
+    BASIC_BLOCK, LEFT_BLOCK, RIGHT_BLOCK = 0, 1, 2
+
     def __init__(self):
         self.x, self.y = 400, 700
-        self.image = load_image('block_pice.png')
+        self.image_basic = load_image('block_pice.png')
+        self.image_LEFT = load_image('block_L.png')
+        self.image_RIGHT = load_image('block_R.png')
 
     def draw(self):
-        self.image.draw(self.x, self.y)
+        # 블록 기본 3종류
+        block_num = random.randint(0,2)
+        if (block_num == 0):
+            self.image_basic.draw(self.x, self.y)
+        if (block_num == 1):
+            self.image_LEFT.draw(self.x,self.y)
+        if (block_num == 2):
+            self.image_RIGHT.draw(self.x,self.y)
 
     def update(self,frame_time, post_block_y):
         self.y -= frame_time * self.MOVE_PER_TIME
@@ -117,7 +136,7 @@ def handle_events():
 
 def update(frame_time):
     global BlockList, Block_generate_frame
-
+    #블록들
     Block_generate_frame += frame_time
     post_block_y = 0
     block_index = 0

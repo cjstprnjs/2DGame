@@ -68,6 +68,11 @@ class Background:
     def draw(self):
         self.image.draw(self.x, self.y)
 
+class StaminaBar:
+    def __init__(self):
+        self.x, self.y = 400 , 600
+        self.image = load_image()
+
 class Block:
 
     MOVE_PER_TIME = 200
@@ -95,7 +100,7 @@ class Block:
         if(self.y < post_block_y + 50):
             self.y = post_block_y + 50
     #블럭 지우기
-        
+
 
 
 

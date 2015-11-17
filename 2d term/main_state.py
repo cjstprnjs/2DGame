@@ -26,7 +26,7 @@ class Hero:
     LEFT_ATTACK, RIGHT_ATTACK, DEATH_L, DEATH_R = 0, 1, 2, 3
 
     def __init__(self):
-        self.x, self.y = 300, 135
+        self.x, self.y = 325, 85
         self.frame = random.randint(0, 3)
         self.image_LEFT = load_image('hulk_L.png')
         self.image_RIGHT = load_image('hulk_R.png')
@@ -38,10 +38,10 @@ class Hero:
     def handle_event(self, event):
         if(event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
             self.state = self.LEFT_ATTACK
-            self.x = 300
+            self.x = 325
         elif(event.type, event.key) == (SDL_KEYDOWN, SDLK_RIGHT):
             self.state = self.RIGHT_ATTACK
-            self.x = 500
+            self.x = 475
 
     def update(self,frame_time):
         self.total_frames += Hero.FRAMES_PER_ACTION * Hero.ACTION_PER_TIME
@@ -51,14 +51,14 @@ class Hero:
     def draw(self):
         #공격모션
         if self.state == self.LEFT_ATTACK :
-            self.image_LEFT.clip_draw(self.frame * 200, 0, 200, 200, self.x, self.y)
+            self.image_LEFT.clip_draw(self.frame * 50, 0, 50, 50, self.x, self.y)
         if self.state == self.RIGHT_ATTACK:
-            self.image_RIGHT.clip_draw(self.frame * 200, 0, 200, 200, self.x , self.y )
+            self.image_RIGHT.clip_draw(self.frame * 50, 0, 50, 50, self.x, self.y)
         # 죽었을때
         if self.state == self.DEATH_L:
-            self.image_DEATH_L.clip_draw(self.frame * 200, 0, 200, 200, self.x , self.y - 80)
+            self.image_DEATH_L.clip_draw(self.frame * 50, 0, 50, 50, self.x, self.y - 20)
         if self.state == self.DEATH_R:
-            self.image_DEATH_R.clip_draw(self.frame * 200, 0, 200, 200, self.x , self.y - 80)
+            self.image_DEATH_R.clip_draw(self.frame * 50, 0, 50, 50, self.x, self.y - 20)
 
 class Background:
     def __init__(self):
@@ -67,7 +67,6 @@ class Background:
 
     def draw(self):
         self.image.draw(self.x, self.y)
-
 
 class Block:
 
@@ -80,25 +79,29 @@ class Block:
         self.image_basic = load_image('block_pice.png')
         self.image_LEFT = load_image('block_L.png')
         self.image_RIGHT = load_image('block_R.png')
+        self.block_num = random.randint(0,2)
 
     def draw(self):
-        # 블록 기본 3종류
-        block_num = random.randint(0,2)
-        if (block_num == 0):
+        #블럭 3종류
+        if (self.block_num == 0):
             self.image_basic.draw(self.x, self.y)
-        if (block_num == 1):
+        if (self.block_num == 1):
             self.image_LEFT.draw(self.x,self.y)
-        if (block_num == 2):
+        if (self.block_num == 2):
             self.image_RIGHT.draw(self.x,self.y)
 
     def update(self,frame_time, post_block_y):
         self.y -= frame_time * self.MOVE_PER_TIME
         if(self.y < post_block_y + 50):
             self.y = post_block_y + 50
+    #블럭 지우기
+        
+
+
+
 
     def block_get_Y(self):
         return self.y
-
 
 
 
